@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { StepIndicator } from './ui/step-indicator'
 import { ServiceSelection } from './steps/service-selection'
@@ -41,6 +41,38 @@ export default function Stepper() {
   const [currentStep, setCurrentStep] = useState<number>(1)
   const [formData, setFormData] = useState<Partial<FormData>>(defaultBaseFormData)
   const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const formRef = useRef<HTMLDivElement>(null)
+
+  // Fonction pour scroller vers le formulaire
+  const scrollToForm = useCallback(() => {
+    if (formRef.current) {
+      const offset = 100 // Offset pour éviter que le header ne cache le formulaire
+      const elementPosition = formRef.current.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - offset
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      })
+    }
+  }, [])
+
+  // Scroller vers le formulaire au chargement initial
+  useEffect(() => {
+    // Petit délai pour s'assurer que le DOM est rendu
+    const timer = setTimeout(() => {
+      scrollToForm()
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [scrollToForm])
+
+  // Scroller vers le formulaire à chaque changement d'étape
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      scrollToForm()
+    }, 300) // Délai pour laisser l'animation se terminer
+    return () => clearTimeout(timer)
+  }, [currentStep, scrollToForm])
 
   // Mise à jour des données du formulaire
   const updateFormData = useCallback((data: Partial<FormData>) => {
@@ -51,14 +83,12 @@ export default function Stepper() {
   const nextStep = useCallback(() => {
     if (currentStep < steps.length) {
       setCurrentStep(prev => prev + 1)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }, [currentStep])
 
   const prevStep = useCallback(() => {
     if (currentStep > 1) {
       setCurrentStep(prev => prev - 1)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }, [currentStep])
 
@@ -309,7 +339,7 @@ export default function Stepper() {
           </div>
           
           {/* Container du formulaire avec animation */}
-          <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-8 mt-8">
+          <div ref={formRef} id="devis-form" className="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-8 mt-8">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStep}
