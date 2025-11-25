@@ -31,6 +31,14 @@ const GoogleAnalytics = dynamic(() =>
   { ssr: false }
 );
 
+// Composant Google Tag Manager
+const GoogleTagManager = dynamic(() => 
+  import('@/components/analytics/GoogleTagManager').then(mod => ({
+    default: mod.default
+  })),
+  { ssr: false }
+);
+
 // Définition de la police Changa One
 const changaOne = Changa_One({
   weight: '400',
@@ -79,6 +87,9 @@ export default function RootLayout({
         
         {/* Google Analytics pour le suivi des performances */}
         <GoogleAnalytics />
+        
+        {/* Google Tag Manager */}
+        <GoogleTagManager />
         
         {/* Préchargement optimisé des images critiques avec priorité et tailles adaptées */} 
         <link 
