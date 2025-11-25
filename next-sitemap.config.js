@@ -26,14 +26,7 @@ module.exports = {
         loc: path,
         changefreq: config.changefreq,
         priority,
-        lastmod: new Date().toISOString(),
-        alternateRefs: [
-          {
-            href: `${config.siteUrl}${path}`,
-            hreflang: 'fr',
-            hrefMedia: 'only screen and (max-width: 640px)'
-          }
-        ],
+        lastmod: new Date().toISOString()
       };
     },
   }
