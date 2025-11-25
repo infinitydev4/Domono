@@ -38,18 +38,19 @@ exports.handler = async function(event, context) {
   }
 
   // Déterminer quelle API est appelée
-  const apiType = segments[0]; // Par exemple: quotes, admin, auth
+  const apiType = segments[0]; // Par exemple: quotes, contact, admin, auth
   console.log("[NETLIFY FUNCTION] Type d'API:", apiType);
   
   try {
     let response;
     
-    // Pour les requêtes vers /quotes, vérifier si c'est une soumission de formulaire
-    // Même si le chemin est incorrect, on va quand même essayer de traiter les requêtes POST
-    const isFormSubmission = event.httpMethod === 'POST' && 
+    // Détecter les soumissions de formulaires
+    const isQuoteSubmission = event.httpMethod === 'POST' && 
                            (apiType === 'quotes' || originalPath.includes('/quotes') || originalPath.includes('/api/quotes'));
+    const isContactSubmission = event.httpMethod === 'POST' && 
+                           (apiType === 'contact' || originalPath.includes('/contact') || originalPath.includes('/api/contact'));
     
-    if (isFormSubmission) {
+    if (isQuoteSubmission) {
       console.log("[NETLIFY FUNCTION] Traitement d'une demande de devis (détecté par POST)");
       
       // Traiter la soumission de devis
@@ -81,7 +82,7 @@ exports.handler = async function(event, context) {
             from: 'Devis Domono <contact@domono.fr>',
             to: ['contact@domono.fr'], // Remplacer par l'email réel de réception
             subject: `Nouveau devis ${body.service} - ${body.lastName} ${body.firstName}`,
-            html: generateEmailTemplate(body, quoteId),
+            html: generateQuoteEmailTemplate(body, quoteId),
             reply_to: body.email
           };
           
@@ -133,6 +134,65 @@ exports.handler = async function(event, context) {
           },
           body: JSON.stringify({ 
             error: "Erreur lors de l'envoi du devis", 
+            message: error.message 
+          })
+        };
+      }
+    } else if (isContactSubmission) {
+      console.log("[NETLIFY FUNCTION] Traitement d'un formulaire de contact (détecté par POST)");
+
+      try {
+        let body;
+        try {
+          body = JSON.parse(event.body);
+          console.log("[NETLIFY FUNCTION] Données contact reçues:", JSON.stringify(body, null, 2));
+        } catch (parseError) {
+          console.error("[NETLIFY FUNCTION] Erreur lors du parsing du corps contact:", parseError);
+          throw new Error("Impossible de parser les données du formulaire de contact");
+        }
+
+        if (!resend) {
+          console.error("[NETLIFY FUNCTION] Service d'email non disponible (contact)");
+          throw new Error("Service d'email non disponible");
+        }
+
+        const projectName = formatContactProject(body.project);
+
+        const emailConfig = {
+          from: 'Contact Domono <contact@domono.fr>',
+          to: ['contact@domono.fr'],
+          subject: `Nouvelle demande de contact - ${projectName} - ${body.lastName} ${body.firstName}`,
+          html: generateContactEmailTemplate({
+            ...body,
+            projectName
+          }),
+          reply_to: body.email
+        };
+
+        console.log("[NETLIFY FUNCTION] Tentative d'envoi email contact...");
+        const emailResult = await resend.emails.send(emailConfig);
+        console.log("[NETLIFY FUNCTION] Email contact envoyé:", emailResult);
+
+        return {
+          statusCode: 200,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Methods': 'POST, OPTIONS'
+          },
+          body: JSON.stringify({ message: "Message envoyé avec succès" })
+        };
+      } catch (error) {
+        console.error("[NETLIFY FUNCTION] Erreur lors de l'envoi du contact:", error);
+        return {
+          statusCode: 500,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          },
+          body: JSON.stringify({ 
+            error: "Erreur lors de l'envoi du message",
             message: error.message 
           })
         };
@@ -197,8 +257,8 @@ exports.handler = async function(event, context) {
   }
 };
 
-// Fonction pour générer un template d'email simple
-function generateEmailTemplate(formData, quoteId) {
+// Fonction pour générer un template d'email de devis
+function generateQuoteEmailTemplate(formData, quoteId) {
   const date = new Intl.DateTimeFormat('fr-FR', {
     day: '2-digit',
     month: '2-digit',
@@ -445,4 +505,56 @@ function formatContactTime(time) {
     case 'ANYTIME': return 'À tout moment';
     default: return time;
   }
-} 
+}
+
+function formatContactProject(project) {
+  switch (project) {
+    case 'eclairage': return 'Éclairage intelligent';
+    case 'securite': return 'Sécurité & vidéosurveillance';
+    case 'temperature': return 'Gestion de température';
+    case 'complete': return 'Solution complète';
+    case 'autre': return 'Autre projet';
+    default: return project || 'Non spécifié';
+  }
+}
+
+function generateContactEmailTemplate({ firstName, lastName, email, phone, projectName, message }) {
+  return `
+    <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+      <h1 style="color: #FF6600; margin-bottom: 20px;">Nouvelle demande de contact</h1>
+      
+      <p style="margin-bottom: 20px;">
+        Une nouvelle demande de contact a été soumise sur le site Domono.fr.
+      </p>
+      
+      <h2 style="color: #333; font-size: 18px; margin-top: 30px; padding-bottom: 8px; border-bottom: 1px solid #eaeaea;">
+        Informations client
+      </h2>
+      <ul style="list-style: none; padding: 0; margin: 0;">
+        <li style="padding: 8px 0; border-bottom: 1px solid #eaeaea;">
+          <strong style="display: inline-block; width: 140px;">Nom:</strong> ${lastName} ${firstName}
+        </li>
+        <li style="padding: 8px 0; border-bottom: 1px solid #eaeaea;">
+          <strong style="display: inline-block; width: 140px;">Email:</strong> ${email}
+        </li>
+        <li style="padding: 8px 0; border-bottom: 1px solid #eaeaea;">
+          <strong style="display: inline-block; width: 140px;">Téléphone:</strong> ${phone}
+        </li>
+        <li style="padding: 8px 0; border-bottom: 1px solid #eaeaea;">
+          <strong style="display: inline-block; width: 140px;">Projet:</strong> ${projectName}
+        </li>
+      </ul>
+      
+      <h2 style="color: #333; font-size: 18px; margin-top: 30px; padding-bottom: 8px; border-bottom: 1px solid #eaeaea;">
+        Message
+      </h2>
+      <div style="background-color: #f8f9fa; padding: 16px; border-radius: 6px; margin-top: 15px;">
+        <p style="white-space: pre-wrap; margin: 0;">${message}</p>
+      </div>
+      
+      <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eaeaea; text-align: center; color: #666;">
+        <p style="font-size: 12px;">© ${new Date().getFullYear()} Domono • Tous droits réservés</p>
+      </div>
+    </div>
+  `;
+}
