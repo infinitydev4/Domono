@@ -239,7 +239,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\mohamed\\Documents\\Projets Web\\domono\\domono\\src\\generated\\prisma",
+      "value": "/Users/ruby/Documents/Projets/Domono.fr/domono/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -248,17 +248,16 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "darwin-arm64",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\mohamed\\Documents\\Projets Web\\domono\\domono\\prisma\\schema.prisma",
+    "sourceFilePath": "/Users/ruby/Documents/Projets/Domono.fr/domono/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../../prisma",
   "clientVersion": "6.6.0",
@@ -267,7 +266,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
+  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {

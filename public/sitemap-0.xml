@@ -1,10 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>https://domono.fr/devis/</loc><lastmod>2025-05-01T11:59:36.990Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority><xhtml:link rel="alternate" hreflang="fr" href="https://domono.fr/devis/devis/"/></url>
-<url><loc>https://domono.fr/</loc><lastmod>2025-05-01T11:59:36.990Z</lastmod><changefreq>daily</changefreq><priority>1</priority><xhtml:link rel="alternate" hreflang="fr" href="https://domono.fr/"/></url>
-<url><loc>https://domono.fr/videosurveillance/</loc><lastmod>2025-05-01T11:59:36.990Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority><xhtml:link rel="alternate" hreflang="fr" href="https://domono.fr/videosurveillance/videosurveillance/"/></url>
-<url><loc>https://domono.fr/qui-sommes-nous/</loc><lastmod>2025-05-01T11:59:36.990Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority><xhtml:link rel="alternate" hreflang="fr" href="https://domono.fr/qui-sommes-nous/qui-sommes-nous/"/></url>
-<url><loc>https://domono.fr/domotique/</loc><lastmod>2025-05-01T11:59:36.990Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority><xhtml:link rel="alternate" hreflang="fr" href="https://domono.fr/domotique/domotique/"/></url>
-<url><loc>https://domono.fr/controle-acces/</loc><lastmod>2025-05-01T11:59:36.990Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority><xhtml:link rel="alternate" hreflang="fr" href="https://domono.fr/controle-acces/controle-acces/"/></url>
-<url><loc>https://domono.fr/alarme/</loc><lastmod>2025-05-01T11:59:36.990Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority><xhtml:link rel="alternate" hreflang="fr" href="https://domono.fr/alarme/alarme/"/></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://domono.fr/</loc>
+    <lastmod>2025-05-01T11:59:36.990Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://domono.fr/devis/</loc>
+    <lastmod>2025-05-01T11:59:36.990Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://domono.fr/videosurveillance/</loc>
+    <lastmod>2025-05-01T11:59:36.990Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://domono.fr/qui-sommes-nous/</loc>
+    <lastmod>2025-05-01T11:59:36.990Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://domono.fr/domotique/</loc>
+    <lastmod>2025-05-01T11:59:36.990Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://domono.fr/controle-acces/</loc>
+    <lastmod>2025-05-01T11:59:36.990Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://domono.fr/alarme/</loc>
+    <lastmod>2025-05-01T11:59:36.990Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>

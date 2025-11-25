@@ -3,12 +3,7 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /api
-Disalow: /tarifs
-Disalow: 
-
-# Host
-Host: https://domono.fr
+Disallow: /tarifs
 
 # Sitemaps
 Sitemap: https://domono.fr/sitemap.xml
-Sitemap: https://domono.fr/server-sitemap.xml

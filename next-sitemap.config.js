@@ -4,16 +4,13 @@ module.exports = {
     changefreq: 'daily',
     priority: 0.7,
     sitemapSize: 5000,
-    exclude: ['/admin/*', '/api/*', '/server-sitemap.xml'],
+    exclude: ['/admin/*', '/api/*'],
     robotsTxtOptions: {
-      additionalSitemaps: [
-        'https://domono.fr/server-sitemap.xml',
-      ],
       policies: [
         {
           userAgent: '*',
           allow: '/',
-          disallow: ['/admin', '/api']
+          disallow: ['/admin', '/api', '/tarifs']
         }
       ]
     },
